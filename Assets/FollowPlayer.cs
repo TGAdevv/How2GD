@@ -24,9 +24,9 @@ public class FollowPlayer : MonoBehaviour
 
         newVector += Vector3.right * (player.position.x + 3.4f);
 
-        if (player.transform.position.y > 4.2f + baseHeight && playerScript.CurrentGamemode == Gamemodes.Cube)
+        if (player.transform.position.y > 4.2f + baseHeight && playerScript.cameraValues[(int)playerScript.CurrentGamemode] == 100)
             newVector += Vector3.up * Mathf.SmoothDamp(transform.position.y, player.position.y - (4.2f + baseHeight), ref velocity, 0.3f);
-        else if (Camera.main.transform.position.y > 0 && playerScript.CurrentGamemode == Gamemodes.Cube)
+        else if (Camera.main.transform.position.y > 0 && playerScript.cameraValues[(int)playerScript.CurrentGamemode] == 100)
             newVector += Vector3.up * Mathf.SmoothDamp(transform.position.y, 0, ref velocity, 0.3f);
 
         transform.position = newVector;

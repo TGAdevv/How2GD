@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using UnityEngine.SceneManagement;
 using UnityEngine;
 
-public enum Speeds { Slow = 0, Normal = 1, Fast = 2, Faster = 3, Fastest = 4 };
-public enum Gamemodes { Cube = 100, Ship = 10, Ball = 8, UFO = 10, Wave = 10, Robot = 100, Spider = 9 };
+public enum Speeds { Slow, Normal, Fast, Faster, Fastest};
+public enum Gamemodes { Cube, Ship, Ball, UFO, Wave, Robot, Spider};
 
 public class Movement : MonoBehaviour
 {
@@ -12,6 +12,7 @@ public class Movement : MonoBehaviour
     public Gamemodes CurrentGamemode;
     //                       0      1      2       3      4
     float[] SpeedValues = { 8.6f, 10.4f, 12.96f, 15.6f, 19.27f };
+    public int[] cameraValues = { 100, 10, 8, 10, 10, 100, 9 };
 
     public float GroundCheckRadius;
     public LayerMask GroundMask;
@@ -48,9 +49,7 @@ public class Movement : MonoBehaviour
 
     bool TouchingWall()
     {
-        if(!Physics2D.OverlapBox(new Vector2(transform.position.x - 0.4f, transform.position.y), Vector2.up + (Vector2.right * GroundCheckRadius), 0, GroundMask))
-            return Physics2D.OverlapBox(new Vector2(transform.position.x + 0.4f, transform.position.y), (Vector2.up * 0.7f) + (Vector2.right * GroundCheckRadius), 0, GroundMask);
-        return false;
+        return Physics2D.OverlapBox(new Vector2(transform.position.x + 0.4f, transform.position.y), (Vector2.up * 0.7f) + (Vector2.right * GroundCheckRadius), 0, GroundMask);
     }
 
     void Cube()
