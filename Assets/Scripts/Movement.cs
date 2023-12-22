@@ -8,20 +8,23 @@ public enum Gamemodes { Cube, Ship, Ball, UFO, Wave, Robot, Spider};
 
 public class Movement : MonoBehaviour
 {
-    public Speeds CurrentSpeed;
-    public Gamemodes CurrentGamemode;
-    //                       0      1      2       3      4
-    float[] SpeedValues = { 8.6f, 10.4f, 12.96f, 15.6f, 19.27f };
-    public int[] cameraValues = { 100, 10, 8, 10, 10, 100, 9 };
 
-    public float GroundCheckRadius;
-    public LayerMask GroundMask;
+    [System.NonSerialized] public int[] cameraValues = { 11, 10, 8, 10, 10, 11, 9 };
+    [System.NonSerialized] public float yPosLastPortal = -2.3f;
+    [System.NonSerialized] public bool clickProcessed = false;
+    [System.NonSerialized] public int Gravity = 1;
+
     public Transform Sprite;
 
-    Rigidbody2D rb;
+    public Speeds CurrentSpeed;
+    public Gamemodes CurrentGamemode;
+    public LayerMask GroundMask;
 
-    public int Gravity = 1;
-    public bool clickProcessed = false;
+    public float GroundCheckRadius;
+
+    float[] SpeedValues = { 8.6f, 10.4f, 12.96f, 15.6f, 19.27f };
+
+    Rigidbody2D rb;
 
     void Start()
     {
@@ -40,11 +43,6 @@ public class Movement : MonoBehaviour
     public bool OnGround()
     {
         return Physics2D.OverlapBox(transform.position + Vector3.down * Gravity * 0.5f, Vector2.right * 1.1f + Vector2.up * GroundCheckRadius, 0, GroundMask);
-    }
-
-    private void OnDrawGizmos()
-    {
-        Gizmos.DrawLine(transform.position + (Vector3.right * 0.5f) - (Vector3.down * 0.5f), transform.position + (Vector3.right * 0.5f) - (Vector3.up * 0.5f));
     }
 
     bool TouchingWall()
@@ -120,11 +118,10 @@ public class Movement : MonoBehaviour
 
     void ResetPlayer()
     {
-        Time.timeScale = 0;
-        //SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
+        SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex);
     }
 
-    public void ChangeThroughPortal(Gamemodes Gamemode, Speeds Speed, int gravity, int State)
+    public void ChangeThroughPortal(Gamemodes Gamemode, Speeds Speed, int gravity, int State, float yPosPortal)
     {
         switch (State)
         {
@@ -133,6 +130,8 @@ public class Movement : MonoBehaviour
                 break;
             case 1:
                 CurrentGamemode = Gamemode;
+                yPosLastPortal = yPosPortal;
+                Sprite.rotation = Quaternion.identity;
                 break;
             case 2:
                 Gravity = gravity;
@@ -145,6 +144,7 @@ public class Movement : MonoBehaviour
     private void OnTriggerEnter2D(Collider2D collision)
     {
         PortalScript portal = collision.gameObject.GetComponent<PortalScript>();
+
         if (portal)
             portal.initiatePortal(this);
     }

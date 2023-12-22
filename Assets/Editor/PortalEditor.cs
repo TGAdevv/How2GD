@@ -13,6 +13,8 @@ public class PortalEditor : Editor
 
     public override void OnInspectorGUI()
     {
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("portalTextures"));
+
         if (FirstTime)
         {
             switch (serializedObject.FindProperty("State").intValue)
@@ -48,7 +50,6 @@ public class PortalEditor : Editor
                 break;
 
         }
-
         FirstTime = false;
 
         serializedObject.ApplyModifiedProperties();
